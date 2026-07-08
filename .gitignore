@@ -1,0 +1,5 @@
+# Block these files anywhere they appear in the project tree
+**/node_modules/
+**/.env
+**/*.log
+package-lock.json
