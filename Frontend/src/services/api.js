@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const WRITE_API_URL = 'http://localhost:3001';
-const READ_API_URL = 'http://localhost:3002';
+const WRITE_API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+const READ_API_URL = import.meta.env.VITE_READ_API_URL || 'http://localhost:3002';
 
 // Axios instance for write & auth operations (port 3001)
 export const writeApi = axios.create({
