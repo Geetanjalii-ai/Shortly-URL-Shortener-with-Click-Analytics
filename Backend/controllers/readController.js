@@ -117,27 +117,17 @@ async function logAnalytics(urlId, req) {
                         cleanIp === '::ffff:127.0.0.1';
 
     if (isLocalhost) {
-      console.log(`📡 Localhost detected [${ip}]. Fetching dynamic public IP path...`);
-      try {
-        // Using an alternate highly reliable public endpoint with a 3-second timeout safety
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-        const response = await fetch('https://ipapi.co/json/', { signal: controller.signal });
-        clearTimeout(timeoutId);
-        
-        const data = await response.json();
-        
-        if (data && !data.error) {
-          country = data.country_code || 'Unknown'; 
-          city = data.city || 'Unknown';           
-        } else if (data && data.error) {
-          console.error('⚠️ ipapi.co returned an error payload:', data.reason);
-        }
-      } catch (apiErr) {
-        // This will print out the exact network block in your terminal console if it fails!
-        console.error('❌ Dynamic Public IP API lookup failed. Reason:', apiErr.message);
-      }
+      console.log(`📡 Localhost detected [${ip}]. Hardcoding mock geolocation for development...`);
+      const mocks = [
+        { country: 'IN', city: 'Mumbai' },
+        { country: 'US', city: 'San Francisco' },
+        { country: 'GB', city: 'London' },
+        { country: 'DE', city: 'Berlin' },
+        { country: 'CA', city: 'Toronto' }
+      ];
+      const selected = mocks[Math.floor(Math.random() * mocks.length)];
+      country = selected.country;
+      city = selected.city;
     } else {
       // PRODUCTION PATH: Use the high-speed local binary database for real users
       const geo = geoip.lookup(ip);
